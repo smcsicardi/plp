@@ -26,7 +26,7 @@ longitudPromedioPalabras :: Extractor
 longitudPromedioPalabras s = mean([genericLength(a) | a <- split " " s])
 
 cuentas :: Eq a => [a] -> [(Int, a)]
-cuentas = undefined
+cuentas = foldr (\x rec -> (foldr (\y rec_i -> if (==) x (snd y) then ((fst y+1,x):tail rec_i) else rec_i) ((1,x):rec) rec)) []
 
 repeticionesPromedio :: Extractor
 repeticionesPromedio = mean[fromInteger(x)|(x, y) <- cuentas split " " s]
