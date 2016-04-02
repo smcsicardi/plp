@@ -23,13 +23,13 @@ split :: Eq a => a -> [a] -> [[a]]
 split = undefined
 
 longitudPromedioPalabras :: Extractor
-longitudPromedioPalabras = undefined
+longitudPromedioPalabras s = mean([genericLength(a) | a <- split " " s])
 
 cuentas :: Eq a => [a] -> [(Int, a)]
 cuentas = undefined
 
 repeticionesPromedio :: Extractor
-repeticionesPromedio = undefined
+repeticionesPromedio = mean[fromInteger(x)|(x, y) <- cuentas split " " s]
 
 tokens :: [Char]
 tokens = "_,)(*;-=>/.{}\"&:+#[]<|%!\'@?~^$` abcdefghijklmnopqrstuvwxyz0123456789"
