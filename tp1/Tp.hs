@@ -25,8 +25,11 @@ split = undefined
 longitudPromedioPalabras :: Extractor
 longitudPromedioPalabras s = mean([genericLength(a) | a <- split " " s])
 
+contar :: Eq a => a -> [a] -> Int
+contar x =  length . filter (==x)
+
 cuentas :: Eq a => [a] -> [(Int, a)]
-cuentas = foldr (\x rec -> (foldr (\y rec_i -> if (==) x (snd y) then ((fst y+1,x):tail rec_i) else rec_i) ((1,x):rec) rec)) []
+cuentas xs = [contar x xs | x <- nub xs] 
 
 repeticionesPromedio :: Extractor
 repeticionesPromedio = mean[fromInteger(x)|(x, y) <- cuentas split " " s]
@@ -46,14 +49,16 @@ extraerFeatures = undefined
 distEuclideana :: Medida
 distEuclideana = undefined
 
-distCoseno :: Medida
-distCoseno = undefined
+distCoseno :: Medida -- toma dos [Feature] y devuelve un float
+distCoseno i1 i2 = (div) (f i1 i2) ((*) (g i1) (g i2)) where
+					f l1 l2 = sum (zipWith (*) l1 l2)
+					g xs = sqrt (f xs xs) 
 
 knn :: Int -> Datos -> [Etiqueta] -> Medida -> Modelo
 knn = undefined
 
 accuracy :: [Etiqueta] -> [Etiqueta] -> Float
-accuracy = undefined
+accuracy xs ys = mean (map (\x y -> if ((==) x y) then 1 else 0) (zip xs ys))
 
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
 separarDatos = undefined
