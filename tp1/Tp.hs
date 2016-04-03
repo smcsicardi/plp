@@ -20,7 +20,7 @@ mean :: [Float] -> Float
 mean xs = realToFrac (sum xs) / genericLength xs
 
 split :: Eq a => a -> [a] -> [[a]]
-split = undefined
+split x = foldr (\y rec -> if y == x then []:rec else (y:(head rec)):(tail rec)) []
 
 longitudPromedioPalabras :: Extractor
 longitudPromedioPalabras s = mean(map genericLength (split ' ' s))
@@ -32,7 +32,7 @@ cuentas :: Eq a => [a] -> [(Int, a)]
 cuentas xs = [(contar x xs,x) | x <- nub xs]
 
 repeticionesPromedio :: Extractor
-repeticionesPromedio = undefined --mean[fromInteger(x)|(x, y) <- cuentas split ' ' s]
+repeticionesPromedio txt = mean (map (\(x,y) -> fromIntegral x) (cuentas (split ' ' txt)))
 
 tokens :: [Char]
 tokens = "_,)(*;-=>/.{}\"&:+#[]<|%!\'@?~^$` abcdefghijklmnopqrstuvwxyz0123456789"
@@ -45,7 +45,7 @@ normalizarExtractor :: [Texto] -> Extractor -> Extractor
 normalizarExtractor ts = \e t -> e t/maximum (map (abs.e) ts)
 
 extraerFeatures :: [Extractor] -> [Texto] -> Datos
-extraerFeatures = undefined
+extraerFeatures ext txt = foldr (\t rec -> (map (\ex -> (normalizarExtractor txt ex) t ) ext):rec) [] txt
 
 distEuclideana :: Medida
 distEuclideana i1 i2 = sqrt(realToFrac (sum (map (^2) (zipWith (-) i1 i2))))
