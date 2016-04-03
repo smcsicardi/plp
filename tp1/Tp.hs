@@ -48,10 +48,10 @@ extraerFeatures :: [Extractor] -> [Texto] -> Datos
 extraerFeatures = undefined
 
 distEuclideana :: Medida
-distEuclideana i1 i2 = sqrt sum (map (^2) (zipWith (-) i1 i2))
+distEuclideana i1 i2 = sqrt(realToFrac (sum (map (^2) (zipWith (-) i1 i2))))
 
 distCoseno :: Medida -- toma dos [Feature] y devuelve un float
-distCoseno i1 i2 = (div) (f i1 i2) ((*) (g i1) (g i2)) where
+distCoseno i1 i2 = realToFrac( (f i1 i2) / ((*) (g i1) (g i2)) ) where
 					f l1 l2 = sum (zipWith (*) l1 l2)
 					g xs = sqrt (f xs xs) 
 
@@ -59,7 +59,7 @@ knn :: Int -> Datos -> [Etiqueta] -> Medida -> Modelo
 knn = undefined
 
 accuracy :: [Etiqueta] -> [Etiqueta] -> Float
-accuracy xs ys = mean (map (\x y -> if ((==) x y) then 1 else 0) (zip xs ys))
+accuracy xs ys = mean (map (\(x, y) -> if ((==) x y) then 1 else 0) (zip xs ys))
 
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
 separarDatos = undefined
