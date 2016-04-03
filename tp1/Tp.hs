@@ -20,7 +20,7 @@ mean :: [Float] -> Float
 mean xs = realToFrac (sum xs) / genericLength xs
 
 split :: Eq a => a -> [a] -> [[a]]
-split x = foldr (\y rec -> if y == x then []:rec else (y:(head rec)):(tail rec)) [[]]
+split x = foldr (\y rec -> if y == x then []:rec else (y:(head rec)):(tail rec)) []
 
 longitudPromedioPalabras :: Extractor
 longitudPromedioPalabras s = mean(map genericLength (split ' ' s))
