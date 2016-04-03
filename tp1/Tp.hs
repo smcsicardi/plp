@@ -23,7 +23,7 @@ split :: Eq a => a -> [a] -> [[a]]
 split = undefined
 
 longitudPromedioPalabras :: Extractor
-longitudPromedioPalabras s = mean([genericLength(a) | a <- split " " s])
+longitudPromedioPalabras s = mean(map genericLength (split ' ' s))
 
 contar :: Eq a => a -> [a] -> Int
 contar x =  length . filter (==x)
@@ -32,22 +32,23 @@ cuentas :: Eq a => [a] -> [(Int, a)]
 cuentas xs = [(contar x xs,x) | x <- nub xs]
 
 repeticionesPromedio :: Extractor
-repeticionesPromedio = mean[fromInteger(x)|(x, y) <- cuentas split " " s]
+repeticionesPromedio = undefined --mean[fromInteger(x)|(x, y) <- cuentas split ' ' s]
 
 tokens :: [Char]
 tokens = "_,)(*;-=>/.{}\"&:+#[]<|%!\'@?~^$` abcdefghijklmnopqrstuvwxyz0123456789"
 
 frecuenciaTokens :: [Extractor]
-frecuenciaTokens = undefined
+-- frecuenciaTokens = [\txt -> head([x|(x, y) <- cuentas txt, y == t]) /genericLength(txt)| t <- tokens]
+frecuenciaTokens = [\txt -> realToFrac(contar t txt)/genericLength(txt)| t <- tokens]
 
 normalizarExtractor :: [Texto] -> Extractor -> Extractor
-normalizarExtractor = undefined
+normalizarExtractor ts = \e t -> e t/maximum (map (abs.e) ts)
 
 extraerFeatures :: [Extractor] -> [Texto] -> Datos
 extraerFeatures = undefined
 
 distEuclideana :: Medida
-distEuclideana = undefined
+distEuclideana i1 i2 = sqrt sum (map (^2) (zipWith (-) i1 i2))
 
 distCoseno :: Medida -- toma dos [Feature] y devuelve un float
 distCoseno i1 i2 = (div) (f i1 i2) ((*) (g i1) (g i2)) where
