@@ -29,7 +29,7 @@ contar :: Eq a => a -> [a] -> Int
 contar x =  length . filter (==x)
 
 cuentas :: Eq a => [a] -> [(Int, a)]
-cuentas xs = [contar x xs | x <- nub xs] 
+cuentas xs = [(contar x xs,x) | x <- nub xs]
 
 repeticionesPromedio :: Extractor
 repeticionesPromedio = mean[fromInteger(x)|(x, y) <- cuentas split " " s]
