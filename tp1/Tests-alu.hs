@@ -21,3 +21,24 @@ testsSplit = test [
 testsCuentas = test [
 	cuentas ["x","x","y","x","z"] ~?= [(3,"x"), (1,"y"), (1,"z")]
 	]
+
+testsLongPromPal = test [
+	longitudPromedioPalabras "vete de mi, cuervo negro" ~?= 4
+	]
+
+testsRepProm = test [
+	repeticionesPromedio "xyz" ~?= 1
+	repeticionesPromedio "xxyxz" ~?= 5/3
+	repeticionesPromedio "spinetta" ~?= 8/7
+	]
+
+testsFrecTok = test [
+]
+
+testsNormExt = test [
+	(normalizarExtractor ["xyz","xxyxz","spinetta"] repeticionesPromedio) "xyz" ~?= 3/5
+]
+
+testsDistEucl = test [
+	distEuclideana [3,0] [0,4] ~?= 5
+]

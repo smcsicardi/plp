@@ -47,7 +47,7 @@ extraerFeatures :: [Extractor] -> [Texto] -> Datos
 extraerFeatures ext txt = foldr (\t rec -> (map (\ex -> (normalizarExtractor txt ex) t ) ext):rec) [] txt
 
 distEuclideana :: Medida
-distEuclideana i1 i2 = sqrt(realToFrac (sum (map (^2) (zipWith (-) i1 i2))))
+distEuclideana i1 i2 = (sqrt.realToFrac.sum) (map (^2) (zipWith (-) i1 i2))
 
 distCoseno :: Medida -- toma dos [Feature] y devuelve un float
 distCoseno i1 i2 = realToFrac( (f i1 i2) / ((*) (g i1) (g i2)) ) where
@@ -58,10 +58,14 @@ knn :: Int -> Datos -> [Etiqueta] -> Medida -> Modelo
 knn = undefined
 
 accuracy :: [Etiqueta] -> [Etiqueta] -> Float
-accuracy xs ys = mean (map (\(x, y) -> if ((==) x y) then 1 else 0) (zip xs ys))
+accuracy xs ys = mean (map (\(x, y) -> if ((==) x y) then 1 else 0) (zip xs ys)) -- = length.filter id (zipWith (==) xs ys)/length (ys)
 
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
 separarDatos = undefined
 
+nFoldAux:: (Datos, Datos, [Etiqueta], [Etiqueta]) -> Float
+nFoldAux (xt, xv, yt, yv) = accuracy (map (\ins -> (knn 15 xt yt distEuclideana) ins) xv) yv
+
 nFoldCrossValidation :: Int -> Datos -> [Etiqueta] -> Float
-nFoldCrossValidation = undefined
+nFoldCrossValidation n d es = mean [nFoldAux (separarDatos d es n p) | p<- [0..n]]
+				
