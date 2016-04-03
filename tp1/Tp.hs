@@ -38,7 +38,6 @@ tokens :: [Char]
 tokens = "_,)(*;-=>/.{}\"&:+#[]<|%!\'@?~^$` abcdefghijklmnopqrstuvwxyz0123456789"
 
 frecuenciaTokens :: [Extractor]
--- frecuenciaTokens = [\txt -> head([x|(x, y) <- cuentas txt, y == t]) /genericLength(txt)| t <- tokens]
 frecuenciaTokens = [\txt -> realToFrac(contar t txt)/genericLength(txt)| t <- tokens]
 
 normalizarExtractor :: [Texto] -> Extractor -> Extractor
