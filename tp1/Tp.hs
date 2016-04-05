@@ -61,10 +61,11 @@ accuracy :: [Etiqueta] -> [Etiqueta] -> Float
 accuracy xs ys = mean (map (\(x, y) -> if ((==) x y) then 1 else 0) (zip xs ys)) -- = length.filter id (zipWith (==) xs ys)/length (ys)
 
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
-separarDatos da et n p = (take primeros da ++ take ultimos (drop (part*p) da), take part (drop primeros da), take primeros et ++ take ultimos (drop (part*p) et), take part (drop primeros et)) where
+separarDatos da et n p = (take primeros da ++ take ultimos (drop inclusiveP da), take part (drop primeros da), take primeros et ++ take ultimos (drop inclusiveP et), take part (drop primeros et)) where
 							part = div (length da) n
 							primeros = part*(p-1)
 							ultimos = part*n-part*p
+							inclusiveP = part*p
 nFoldAux:: (Datos, Datos, [Etiqueta], [Etiqueta]) -> Float
 nFoldAux (xt, xv, yt, yv) = accuracy (map (\ins -> (knn 15 xt yt distEuclideana) ins) xv) yv
 
