@@ -62,7 +62,7 @@ knn k insts labels fDist = \x -> moda (map (snd) (kintanciasmascerca x)) where
 							moda xs = snd (maximum (cuentas xs))
 
 accuracy :: [Etiqueta] -> [Etiqueta] -> Float
-accuracy xs ys = mean (map (\(x, y) -> if ((==) x y) then 1 else 0) (zip xs ys)) -- = length.filter id (zipWith (==) xs ys)/length (ys)
+accuracy xs ys = mean (zipWith (\(x, y) -> if ((==) x y) then 1 else 0) xs ys) -- = length.filter id (zipWith (==) xs ys)/length (ys)
 
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
 separarDatos da et n p = (take primeros da ++ take ultimos (drop inclusiveP da), take part (drop primeros da), take primeros et ++ take ultimos (drop inclusiveP et), take part (drop primeros et)) where
