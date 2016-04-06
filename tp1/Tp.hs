@@ -1,6 +1,7 @@
 module Tp where
 
 import Data.List
+import Data.Function
 
 type Texto = String
 type Feature = Float
@@ -55,7 +56,10 @@ distCoseno i1 i2 = realToFrac( (f i1 i2) / ((*) (g i1) (g i2)) ) where
 					g xs = sqrt (f xs xs) 
 
 knn :: Int -> Datos -> [Etiqueta] -> Medida -> Modelo
-knn = undefined
+knn k insts labels fDist = \x -> moda (map (snd) (kintanciasmascerca x)) where
+							calcDists x = sortBy (compare `on` fst) [(fDist x ins, label) | (ins,label) <- (zip insts labels)]
+							kintanciasmascerca x = take k (calcDists x)
+							moda xs = snd (head (sortBy (compare `on` fst) (cuentas xs)))
 
 accuracy :: [Etiqueta] -> [Etiqueta] -> Float
 accuracy xs ys = mean (map (\(x, y) -> if ((==) x y) then 1 else 0) (zip xs ys)) -- = length.filter id (zipWith (==) xs ys)/length (ys)
@@ -66,6 +70,7 @@ separarDatos da et n p = (take primeros da ++ take ultimos (drop inclusiveP da),
 							primeros = part*(p-1)
 							ultimos = part*n-part*p
 							inclusiveP = part*p
+
 nFoldAux:: (Datos, Datos, [Etiqueta], [Etiqueta]) -> Float
 nFoldAux (xt, xv, yt, yv) = accuracy (map (\ins -> (knn 15 xt yt distEuclideana) ins) xv) yv
 
