@@ -21,7 +21,7 @@ mean :: [Float] -> Float
 mean xs = realToFrac (sum xs) / genericLength xs
 
 split :: Eq a => a -> [a] -> [[a]]
-split x = foldr (\y rec -> if y == x then []:rec else (y:(head rec)):(tail rec)) [[]]
+split x xs = filter (not.null) (foldr (\y rec -> if y == x then []:rec else (y:(head rec)):(tail rec)) [[]] xs)
 
 longitudPromedioPalabras :: Extractor
 longitudPromedioPalabras s = mean(map genericLength (split ' ' s))
@@ -30,7 +30,7 @@ contar :: Eq a => a -> [a] -> Int
 contar x =  length . filter (==x)
 
 cuentas :: Eq a => [a] -> [(Int, a)]
-cuentas xs = [(contar x xs,x) | x <- nub xs]
+cuentas xs = map (\x -> (contar x xs,x)) (nub xs)
 
 repeticionesPromedio :: Extractor
 repeticionesPromedio txt = mean (map (\(x,y) -> fromIntegral x) (cuentas (split ' ' txt)))
@@ -48,21 +48,20 @@ extraerFeatures :: [Extractor] -> [Texto] -> Datos
 extraerFeatures ext txt = foldr (\t rec -> (map (\ex -> (normalizarExtractor txt ex) t ) ext):rec) [] txt
 
 distEuclideana :: Medida
-distEuclideana i1 i2 = (sqrt.realToFrac.sum) zipWith ((^2).(-)) i1 i2
+distEuclideana i1 i2 = (sqrt.realToFrac) (foldr (\(x,y) a -> (x-y)^2+a) 0 (zip i1 i2)) --(sqrt.realToFrac.sum) (map (^2) (zipWith (-) i1 i2))
 
-distCoseno :: Medida -- toma dos [Feature] y devuelve un float
+distCoseno :: Medida
 distCoseno i1 i2 = realToFrac( (f i1 i2) / ((*) (g i1) (g i2)) ) where
 					f l1 l2 = sum (zipWith (*) l1 l2)
 					g xs = sqrt (f xs xs) 
 
 knn :: Int -> Datos -> [Etiqueta] -> Medida -> Modelo
-knn k insts labels fDist = \x -> moda (map (snd) (kintanciasmascerca x)) where
-							calcDists x = sortBy (flip compare) (zipWith (\(xx,yy) -> (fDist x xx, yy)) insts labels)
+knn k insts labels fDist = \x -> (snd.maximum.cuentas) (map (snd) (kintanciasmascerca x)) where
 							kintanciasmascerca x = take k (calcDists x)
-							moda xs = snd (maximum (cuentas xs))
+							calcDists x = sort (zipWith (\a b -> (fDist x a, b)) insts labels)
 
 accuracy :: [Etiqueta] -> [Etiqueta] -> Float
-accuracy xs ys = mean (zipWith (\(x, y) -> if ((==) x y) then 1 else 0) xs ys) -- = length.filter id (zipWith (==) xs ys)/length (ys)
+accuracy xs ys = mean (zipWith (\x y -> if ((==) x y) then 1 else 0) xs ys)
 
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
 separarDatos da et n p = (take primeros da ++ take ultimos (drop inclusiveP da), take part (drop primeros da), take primeros et ++ take ultimos (drop inclusiveP et), take part (drop primeros et)) where
