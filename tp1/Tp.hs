@@ -48,7 +48,7 @@ extraerFeatures :: [Extractor] -> [Texto] -> Datos
 extraerFeatures ext txt = foldr (\t rec -> (map (\ex -> (normalizarExtractor txt ex) t ) ext):rec) [] txt
 
 distEuclideana :: Medida
-distEuclideana i1 i2 = (sqrt.realToFrac.sum) (map (^2) (zipWith (-) i1 i2))
+distEuclideana i1 i2 = (sqrt.realToFrac.sum) zipWith ((^2).(-)) i1 i2
 
 distCoseno :: Medida -- toma dos [Feature] y devuelve un float
 distCoseno i1 i2 = realToFrac( (f i1 i2) / ((*) (g i1) (g i2)) ) where
