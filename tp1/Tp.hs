@@ -59,7 +59,7 @@ knn :: Int -> Datos -> [Etiqueta] -> Medida -> Modelo
 knn k insts labels fDist = \x -> moda (map (snd) (kintanciasmascerca x)) where
 							calcDists x = sortBy (flip compare) [(fDist x ins, label) | (ins,label) <- (zip insts labels)]
 							kintanciasmascerca x = take k (calcDists x)
-							moda xs = snd (head (sortBy (flip compare) (cuentas xs)))
+							moda xs = snd (max (cuentas xs))
 
 accuracy :: [Etiqueta] -> [Etiqueta] -> Float
 accuracy xs ys = mean (map (\(x, y) -> if ((==) x y) then 1 else 0) (zip xs ys)) -- = length.filter id (zipWith (==) xs ys)/length (ys)
