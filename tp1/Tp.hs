@@ -57,7 +57,7 @@ distCoseno i1 i2 = realToFrac( (f i1 i2) / ((*) (g i1) (g i2)) ) where
 
 knn :: Int -> Datos -> [Etiqueta] -> Medida -> Modelo
 knn k insts labels fDist = \x -> moda (map (snd) (kintanciasmascerca x)) where
-							calcDists x = sortBy (flip compare) [(fDist x ins, label) | (ins,label) <- (zip insts labels)]
+							calcDists x = sortBy (flip compare) (zipWith (\(xx,yy) -> (fDist x xx, yy)) insts labels)
 							kintanciasmascerca x = take k (calcDists x)
 							moda xs = snd (max (cuentas xs))
 
