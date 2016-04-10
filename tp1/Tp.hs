@@ -67,9 +67,9 @@ accuracy xs ys = mean (zipWith (\x y -> if ((==) x y) then 1 else 0) xs ys)
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
 separarDatos da et n p = (take primeros da ++ take ultimos (drop inclusiveP da), take part (drop primeros da), take primeros et ++ take ultimos (drop inclusiveP et), take part (drop primeros et)) where
 							part = div (length da) n
-							primeros = part*p
-							ultimos = part*n-part*(p+1)
-							inclusiveP = part*(p+1)
+							primeros = part*(p-1)
+							ultimos = part*n-part*p
+							inclusiveP = part*p
 
 nFoldAux:: (Datos, Datos, [Etiqueta], [Etiqueta]) -> Float
 nFoldAux (xt, xv, yt, yv) = accuracy (map (\ins -> (knn 15 xt yt distEuclideana) ins) xv) yv
