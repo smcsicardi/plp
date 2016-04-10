@@ -35,6 +35,7 @@ cuentas xs = map (\x -> (contar x xs,x)) (nub xs)
 repeticionesPromedio :: Extractor
 repeticionesPromedio txt = mean (map (\(x,y) -> fromIntegral x) (cuentas (split ' ' txt)))
 
+
 tokens :: [Char]
 tokens = "_,)(*;-=>/.{}\"&:+#[]<|%!\'@?~^$` abcdefghijklmnopqrstuvwxyz0123456789"
 
@@ -66,12 +67,13 @@ accuracy xs ys = mean (zipWith (\x y -> if ((==) x y) then 1 else 0) xs ys)
 separarDatos :: Datos -> [Etiqueta] -> Int -> Int -> (Datos, Datos, [Etiqueta], [Etiqueta])
 separarDatos da et n p = (take primeros da ++ take ultimos (drop inclusiveP da), take part (drop primeros da), take primeros et ++ take ultimos (drop inclusiveP et), take part (drop primeros et)) where
 							part = div (length da) n
-							primeros = part*(p-1)
-							ultimos = part*n-part*p
-							inclusiveP = part*p
+							primeros = part*p
+							ultimos = part*n-part*(p+1)
+							inclusiveP = part*(p+1)
 
 nFoldAux:: (Datos, Datos, [Etiqueta], [Etiqueta]) -> Float
 nFoldAux (xt, xv, yt, yv) = accuracy (map (\ins -> (knn 15 xt yt distEuclideana) ins) xv) yv
+-- Entrena sabiendo que a los datos xt le corresponden las etiquetas yt. Para validar, agarra xv y calcula las etiquetas con los puntos que ya tiene. Comparamos eso con las etiquetas correctas (yv) para ver cómo le fue
 
 nFoldCrossValidation :: Int -> Datos -> [Etiqueta] -> Float
 nFoldCrossValidation n d es = mean [nFoldAux (separarDatos d es n p) | p<- [0..n]]
