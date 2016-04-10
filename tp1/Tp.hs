@@ -43,7 +43,8 @@ frecuenciaTokens :: [Extractor]
 frecuenciaTokens = [\txt -> realToFrac(contar t txt)/genericLength(txt)| t <- tokens]
 
 normalizarExtractor :: [Texto] -> Extractor -> Extractor
-normalizarExtractor ts = \e t -> e t/maximum (map (abs.e) ts)
+normalizarExtractor ts = let mx = maximum (map (abs.e) ts) in \e t -> e t/mx
+--El let me evita volver a calcular el máximo cada vez
 
 extraerFeatures :: [Extractor] -> [Texto] -> Datos
 extraerFeatures ext txt = foldr (\t rec -> (map (\ex -> (normalizarExtractor txt ex) t ) ext):rec) [] txt
@@ -76,5 +77,5 @@ nFoldAux (xt, xv, yt, yv) = accuracy (map (\ins -> (knn 15 xt yt distEuclideana)
 -- Entrena sabiendo que a los datos xt le corresponden las etiquetas yt. Para validar, agarra xv y calcula las etiquetas con los puntos que ya tiene. Comparamos eso con las etiquetas correctas (yv) para ver cómo le fue
 
 nFoldCrossValidation :: Int -> Datos -> [Etiqueta] -> Float
-nFoldCrossValidation n d es = mean [nFoldAux (separarDatos d es n p) | p<- [0..n]]
+nFoldCrossValidation n d es = mean [nFoldAux (separarDatos d es n p) | p<- [1..n]]
 				
