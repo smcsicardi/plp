@@ -47,7 +47,8 @@ normalizarExtractor ts = let mx = maximum (map (abs.e) ts) in \e t -> e t/mx
 --El let me evita volver a calcular el máximo cada vez
 
 extraerFeatures :: [Extractor] -> [Texto] -> Datos
-extraerFeatures ext txt = foldr (\t rec -> (map (\ex -> (normalizarExtractor txt ex) t ) ext):rec) [] txt
+extraerFeatures ext txt = let normalizadoExt = map (\ex -> normalizarExtractor txt ex) ext
+                           in foldr (\t rec -> (map (\normEx -> normEx t ) normalizadoExt):rec) [] txt
 
 distEuclideana :: Medida
 distEuclideana i1 i2 = (sqrt.realToFrac) (foldr (\(x,y) a -> (x-y)^2+a) 0 (zip i1 i2)) --(sqrt.realToFrac.sum) (map (^2) (zipWith (-) i1 i2))
