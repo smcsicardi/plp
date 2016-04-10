@@ -50,18 +50,19 @@ testsFrecTok = test [
 
 testsNormExt = test [
 	(normalizarExtractor ["ya despiertate nena sube al rayo al fin ya despiertate rayo sube a la nena","a a a b b b c c c"] repeticionesPromedio) "ya despiertate nena sube al rayo al fin ya despiertate rayo sube a la nena" ~?= 5/9,
-
 	(normalizarExtractor ["vete de mi, cuervo negro", "toma el tren hacia el sur"] longitudPromedioPalabras) "vete de mi, cuervo negro" ~?= 1
 	]
 
 testsDistEucl = test [
 	distEuclideana [3,0] [0,4] ~?= 5,
-	distEuclideana [3,0] [4,0] ~?= 1
+	distEuclideana [3,0] [4,0] ~?= 1,
+	distEuclideana [1.0,0.75,0.8125] [0.75,1.0,0.5] ~?= 0.47186464  
 	]
 
 testsDistCos = test [
 	distCoseno [3,0] [0,4] ~?= 0,
-	distCoseno [3,0] [4,0] ~?= 1
+	distCoseno [3,0] [4,0] ~?= 1,
+	distCoseno [0,3,4] [0,-3,-4] ~?= -1 
 	]
 
 testsknn = test [

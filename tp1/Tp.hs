@@ -43,7 +43,7 @@ frecuenciaTokens :: [Extractor]
 frecuenciaTokens = [\txt -> realToFrac(contar t txt)/genericLength(txt)| t <- tokens]
 
 normalizarExtractor :: [Texto] -> Extractor -> Extractor
-normalizarExtractor ts = let mx = maximum (map (abs.e) ts) in \e t -> e t/mx
+normalizarExtractor ts e = let mx = maximum (map (abs.e) ts) in \t -> e t/mx
 --El let me evita volver a calcular el máximo cada vez
 
 extraerFeatures :: [Extractor] -> [Texto] -> Datos
