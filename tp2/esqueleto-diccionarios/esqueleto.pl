@@ -27,6 +27,37 @@ ej(2, [rombo, cuadrado, espacio, perro, triangulo, sol, cuadrado]).
 
 ej(3, [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol, gato]).
 
+diccionario_lista(L):- diccionario(X), string_codes(X, L).
+
+juntar_con([],_,[]).
+juntar_con([X],_,X).
+juntar_con([X,Y|XS],A,R):- append(X,[A|S],R), juntar_con([Y|XS],A,S).
+
+juntar_con2([],_,[]).
+juntar_con2([X|XS],A,R):- juntar_con([X|XS],A,R), \+ member(A,X).
+
+palabras(S, P):- juntar_con(P,espacio,S), [S] \= P. % tira false al final no se si esta bien
+
+% El predicado funciona aunque no se sepa que es la variable V asignada ya que prolog
+% infiere un elemento en esa posicion cuando realiza el arbol de inferencia, para
+% que luego, o se unifique con un valor, o se devuelve asi como esta, que es lo que hace
+asignar_var(A,[],[(A,V)]).
+asignar_var(A,[(A,V)|T],[(A,V)|T]).
+asignar_var(A,[(X,V)|T],[(X,V)|M]):-A \= X,asignar_var(A,T,M).
+
+palabrasconvariables(P, V) :- pcvaux(P, [], V, _).
+
+% (+P, +D, -V -D2): instancia en V la búsqueda de P en D, y en D2 el nuevo dict
+pcvauxpal([], D, [], D).
+pcvauxpal([P|PS], D, [V|VS], D3) :-
+    pcvauxlet(P, D, V, D2), pcvauxpal(PS, D2, VS, D3).
+    
+pcvauxlet([], D, [], D).
+pcvauxlet([P|PS], D, [V|VS], D3) :-
+    buscar(P, D, V, D2), pcvauxlet(PS, D2, VS, D3).
+
+buscar(P, D, V, D2) :- (asignar_var(P, D, D2)), member((P, V), D2).
+
 quitar(_,[],[]).
 quitar(A,[H|T],L):-A==H, quitar(A,T,L).
 quitar(A,[H|T],[H|L]):-A\==H,quitar(A,T,L).
