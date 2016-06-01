@@ -64,3 +64,19 @@ quitar(A,[H|T],[H|L]):-A\==H,quitar(A,T,L).
 
 cant_distintos([],0).
 cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
+
+mensajes_mas_parejos(S, L) :-
+	descifrar_sin_espacios(S, M), member(L, M), largos(L, N), desvest(N, D),
+	not((member(L2, M), largos(L2, N2), desvest(N2, D2), D2 > D)).
+
+largos([],[]).
+largos([L|LS], [N|NS]) :- length(L, N), largos(LS, NS).
+
+%Instancia en D el desvest^2 de la lista de numeros L
+desvest(L, D) :- promedio(L, P), length(L, N), desvestaux(L, P, N, D2), D is D2 / N.
+
+desvestaux([], _, _, 0).
+desvestaux([L|LS], P, N, Res) :-
+	desvestaux(LS, P, N, Rec), Res is (L - P)*(L - P) + Rec.
+
+promedio(L, N) :- sum_list(L, N2), length(L, N3), N is N2 / N3.
