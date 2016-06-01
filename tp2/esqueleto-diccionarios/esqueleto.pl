@@ -33,15 +33,15 @@ juntar_con([],_,[]).
 juntar_con([X],_,X).
 juntar_con([X,Y|XS],A,R):- append(X,[A|S],R), juntar_con([Y|XS],A,S).
 
-juntar_con2([],_,[]).
-juntar_con2([X|XS],A,R):- juntar_con([X|XS],A,R), \+ member(A,X).
-
-palabras(S, P):- juntar_con(P,espacio,S), [S] \= P. % tira false al final no se si esta bien
+palabras(S, P) :- juntar_con(P,espacio,S), not((member(L, P), member(espacio,L))).
 
 % El predicado funciona aunque no se sepa que es la variable V asignada ya que prolog
 % infiere un elemento en esa posicion cuando realiza el arbol de inferencia, para
-% que luego, o se unifique con un valor, o se devuelve asi como esta, que es lo que hace
-asignar_var(A,[],[(A,V)]).
+% que luego pasen una de las dos cosas siguientes, o se unifique con un valor,
+% o se devuelve asi como esta, que es lo que hace
+% Un ejemplo similar es el predicado length(X,3) al cual se le "pide" una lista de longitud 3
+% devuelve X = [_G6839, _G6842, _G6845].
+asignar_var(A,[],[(A,_)]).
 asignar_var(A,[(A,V)|T],[(A,V)|T]).
 asignar_var(A,[(X,V)|T],[(X,V)|M]):-A \= X,asignar_var(A,T,M).
 
