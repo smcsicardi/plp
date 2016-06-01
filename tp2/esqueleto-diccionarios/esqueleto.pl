@@ -1,8 +1,7 @@
 :- dynamic(diccionario/1).
 
 % Dado un nombre de archivo que contiene todas las palabras que se quieren
-% agregar al diccionario (una por linea), vacia diccionario/1 y agrega
-% las definiciones nuevas
+% agregar al diccionario (una por linea), vacia diccionario/1 y agrega las definiciones nuevas
 
 cargar(NombreDeArchivo) :-
   retractall(diccionario(_)),
@@ -45,9 +44,10 @@ asignar_var(A,[],[(A,_)]).
 asignar_var(A,[(A,V)|T],[(A,V)|T]).
 asignar_var(A,[(X,V)|T],[(X,V)|M]):-A \= X,asignar_var(A,T,M).
 
-palabrasconvariables(P, V) :- pcvaux(P, [], V, _).
+palabras_con_variables(P, V) :- pcvauxpal(P, [], V, _).
 
 % (+P, +D, -V -D2): instancia en V la búsqueda de P en D, y en D2 el nuevo dict
+
 pcvauxpal([], D, [], D).
 pcvauxpal([P|PS], D, [V|VS], D3) :-
     pcvauxlet(P, D, V, D2), pcvauxpal(PS, D2, VS, D3).
@@ -64,6 +64,11 @@ quitar(A,[H|T],[H|L]):-A\==H,quitar(A,T,L).
 
 cant_distintos([],0).
 cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
+
+% EJERCICIO 8
+incluido([],L).
+incluido([X|XS],L) :- member(X,L), incluido(XS,L).
+descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V),setof(L,diccionario_lista(L),Q), incluido(V,Q), juntar_con(V,32,N), string_codes(M,N).
 
 mensajes_mas_parejos(S, L) :-
 	descifrar_sin_espacios(S, M), member(L, M), largos(L, N), desvest(N, D),
