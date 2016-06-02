@@ -1,7 +1,7 @@
 :- dynamic(diccionario/1).
 
 % Dado un nombre de archivo que contiene todas las palabras que se quieren
-% agregar al diccionario (una por linea), vacia diccionario/1 y agrega las definiciones nuevas
+% agregar al diccionario (una por linea), vacia diccionario/1 y agrega las %definiciones nuevas
 
 cargar(NombreDeArchivo) :-
   retractall(diccionario(_)),
@@ -26,14 +26,20 @@ ej(2, [rombo, cuadrado, espacio, perro, triangulo, sol, cuadrado]).
 
 ej(3, [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol, gato]).
 
+ej(4, [rombo, cuadrado, perro, cuadrado, espacio, sol, luna, triangulo, estrella, arbol, gato, espacio, pirulo, triangulo, espacio, lagarto, iguana, gato, spi]).
+
+% Ejercico 1
 diccionario_lista(L):- diccionario(X), string_codes(X, L).
 
+% Ejercico 2
 juntar_con([],_,[]).
 juntar_con([X],_,X).
 juntar_con([X,Y|XS],A,R):- append(X,[A|S],R), juntar_con([Y|XS],A,S).
 
+% Ejercico 3
 palabras(S, P) :- juntar_con(P,espacio,S), not((member(L, P), member(espacio,L))).
 
+% Ejercico 4
 % El predicado funciona aunque no se sepa que es la variable V asignada ya que prolog
 % infiere un elemento en esa posicion cuando realiza el arbol de inferencia, para
 % que luego pasen una de las dos cosas siguientes, o se unifique con un valor,
@@ -44,6 +50,7 @@ asignar_var(A,[],[(A,_)]).
 asignar_var(A,[(A,V)|T],[(A,V)|T]).
 asignar_var(A,[(X,V)|T],[(X,V)|M]):-A \= X,asignar_var(A,T,M).
 
+% Ejercico 5
 palabras_con_variables(P, V) :- pcvauxpal(P, [], V, _).
 
 % (+P, +D, -V -D2): instancia en V la búsqueda de P en D, y en D2 el nuevo dict
@@ -58,18 +65,21 @@ pcvauxlet([P|PS], D, [V|VS], D3) :-
 
 buscar(P, D, V, D2) :- (asignar_var(P, D, D2)), member((P, V), D2).
 
+% Ejercico 6
 quitar(_,[],[]).
 quitar(A,[H|T],L):-A==H, quitar(A,T,L).
 quitar(A,[H|T],[H|L]):-A\==H,quitar(A,T,L).
 
+% Ejercico 7
 cant_distintos([],0).
 cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
 
-% EJERCICIO 8
+% Ejercico 8
 incluido([],L).
 incluido([X|XS],L) :- member(X,L), incluido(XS,L).
-descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V),setof(L,diccionario_lista(L),Q), incluido(V,Q), juntar_con(V,32,N), string_codes(M,N).
+descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V),juntar_con(V,32,COMPARAR), cant_distintos(COMPARAR,C1), setof(L,diccionario_lista(L),Q), incluido(V,Q), juntar_con(V,32,N),cant_distintos(N,C2), C1==C2, string_codes(M,N).
 
+% Ejercico 10
 mensajes_mas_parejos(S, L) :-
 	descifrar_sin_espacios(S, M), member(L, M), largos(L, N), desvest(N, D),
 	not((member(L2, M), largos(L2, N2), desvest(N2, D2), D2 > D)).
