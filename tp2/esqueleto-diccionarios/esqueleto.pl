@@ -75,9 +75,9 @@ cant_distintos([],0).
 cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
 
 % Ejercico 8
-incluido([],_).
-incluido([X|XS],L) :- member(X,L), incluido(XS,L).
-descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V),juntar_con(V,32,COMPARAR), cant_distintos(COMPARAR,C1), setof(L,diccionario_lista(L),Q), incluido(V,Q), juntar_con(V,32,N),cant_distintos(N,C2), C1==C2, string_codes(M,N).
+enlista([]).
+enlista([X|XS]) :- diccionario_lista(X), enlista(XS).
+descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V), juntar_con(V,32,COMPARAR), cant_distintos(COMPARAR,C1), enlista(V), juntar_con(V,32,N), cant_distintos(N,C2), C1==C2, string_codes(M,N).
 
 % Ejercico 9
 
@@ -91,8 +91,17 @@ ponerEspacios([X,Y|XS],[X,Y|L]):- ponerEspacios([Y|XS], [Y|L]).
 
 % Ejercico 10
 mensajes_mas_parejos(S, L) :-
-	descifrar_sin_espacios(S, M), member(L, M), largos(L, N), desvest(N, D),
-	not((member(L2, M), largos(L2, N2), desvest(N2, D2), D2 > D)).
+	ponerEspacios(S, S1), descifrar(S1, L), palabras(S1, P), largos(P, N), desvest(N, D),
+	not((ponerEspacios(S, S2), descifrar(S2, _), palabras(S2, P2), largos(P2, N2), desvest(N2, D2), D2 < D)).
+
+%Versión más fea que sí usa al 9
+%mensajes_mas_parejos(S, L) :-
+%	descifrar_sin_espacios(S, L), lista_largos(L, N), desvest(N, D),
+%	not((descifrar_sin_espacios(S, L2), lista_largos(L2, N2), desvest(N2, D2), D2 < D)).
+
+%palabras2(S, P) :- juntar_con(P,32,S), not((member(L, P), member(32,L))).
+
+%lista_largos(L, N) :- string_codes(L, M), palabras2(M, P), largos(P, N).
 
 largos([],[]).
 largos([L|LS], [N|NS]) :- length(L, N), largos(LS, NS).
