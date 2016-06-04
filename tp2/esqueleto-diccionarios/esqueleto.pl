@@ -75,9 +75,19 @@ cant_distintos([],0).
 cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
 
 % Ejercico 8
-incluido([],L).
+incluido([],_).
 incluido([X|XS],L) :- member(X,L), incluido(XS,L).
 descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V),juntar_con(V,32,COMPARAR), cant_distintos(COMPARAR,C1), setof(L,diccionario_lista(L),Q), incluido(V,Q), juntar_con(V,32,N),cant_distintos(N,C2), C1==C2, string_codes(M,N).
+
+% Ejercico 9
+
+descifrar_sin_espacios(S,M):- ponerEspacios(S,S2), descifrar(S2,M).
+
+ponerEspacios([],[]).
+ponerEspacios([X],[X]).
+ponerEspacios([X,Y|XS],[X,espacio,Y|L]):- ponerEspacios([Y|XS], [Y|L]).
+ponerEspacios([X,Y|XS],[X,Y|L]):- ponerEspacios([Y|XS], [Y|L]).
+
 
 % Ejercico 10
 mensajes_mas_parejos(S, L) :-
