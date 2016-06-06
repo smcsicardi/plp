@@ -28,6 +28,10 @@ ej(3, [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol, 
 
 ej(4, [rombo, cuadrado, perro, cuadrado, espacio, sol, luna, triangulo, estrella, arbol, gato, espacio, pirulo, triangulo, espacio, lagarto, iguana, gato, spi]).
 
+ej(5, [hola, colo, como, andas, todo, bien, espacio, como, sol, luna, como, espacio, perro, conejo, sol, espacio, estrella, galaxia, gato, bien]).
+
+ej(6, [t, r, a, d, i, c, i, o, n, a, l, xm, e, n, t, e]).
+
 % Ejercico 1
 diccionario_lista(L):- diccionario(X), string_codes(X, L).
 
@@ -79,12 +83,16 @@ quitar(A,[H|T],L):-A==H, quitar(A,T,L).
 quitar(A,[H|T],[H|L]):-A\==H,quitar(A,T,L).
 
 % Ejercico 7
+% cant_distintos(+L, ?S).
 cant_distintos([],0).
 cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
 
 % Ejercico 8
+% enlista(+L).
 enlista([]).
 enlista([X|XS]) :- diccionario_lista(X), enlista(XS).
+
+% descifrar(+S,?M).
 descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V), juntar_con(V,32,COMPARAR), cant_distintos(COMPARAR,C1), enlista(V), juntar_con(V,32,N), cant_distintos(N,C2), C1==C2, string_codes(M,N).
 
 % Ejercico 9
