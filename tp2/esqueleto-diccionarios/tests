@@ -37,6 +37,30 @@ false.
 true ;
 false.
 
+Ej 7:
+?- cant_distintos([x, Q, a, T, HOLA, T, o, p, a, Q, o, HOLA],S).
+S = 7 ;
+false.
+
+?- cant_distintos([x, Q, a, T, X, q, A, t],S).
+S = 8.
+
+Ej 8:
+?- cargar('dicc0.txt'), ej(2,S), descifrar(S,M).
+S = [rombo, cuadrado, espacio, perro, triangulo, sol, cuadrado],
+M = "la cosa" ;
+false.
+
+?- cargar('dicc1.txt'), ej(4,S), descifrar(S,M).
+S = [rombo, cuadrado, perro, cuadrado, espacio, sol, luna, triangulo, estrella|...],
+M = "casa miento de flor" ;
+false.
+
+?- cargar('10000_formas.txt'), ej(6,S), descifrar(S,M).
+S = [t, r, a, d, i, c, i, o, n|...],
+M = "tradicionalmente" ;
+false.
+
 Ej 10:
 ?- cargar("dicc1.txt").
 true.
