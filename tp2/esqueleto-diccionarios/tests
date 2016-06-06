@@ -1,0 +1,54 @@
+Ej 2:
+?- juntar_con([[x],[x,y],[z]],a, R).
+R = [x, a, x, y, a, z] ;
+false.
+
+?- juntar_con(X, a, [x, a, x, y, a, z]).
+X = [[x, a, x, y, a, z]] ;
+X = [[x], [x, y, a, z]] ;
+X = [[x], [x, y], [z]] ;
+X = [[x, a, x, y], [z]] ;
+false.
+
+?- juntar_con([[x],[x,y],[z]], A, [x, a, x, y, a, z]).
+A = a ;
+false.
+
+?- juntar_con([[x,x,y,z], [a]], _, R).
+R = [x, x, y, z, _G1781, a] ;
+false.
+
+?- juntar_con([[x,x,y,z]], A, [x,x,y,z]).
+true ;
+false.
+
+Ej 5:
+?- ej(1, S), palabras(S, P), palabras_con_variables(P, V).
+S = [rombo, cuadrado, espacio, perro, cuadrado, sol, cuadrado],
+P = [[rombo, cuadrado], [perro, cuadrado, sol, cuadrado]],
+V =  [[_G2003, _G2015], [_G2036, _G2015, _G2078, _G2015]],
+false.
+
+?- palabras_con_variables([[1],[2,1]], X).
+[[_G1751], [_G1766, _G1751]] ;
+false.
+
+?- palabras_con_variables([[1],[2,1]], [[0],[0,0]]).
+true ;
+false.
+
+Ej 10:
+?- cargar("dicc1.txt").
+true.
+
+?- mensajes_mas_parejos([rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol, gato], L).
+L = "casa de flor" ;
+L = "casa flor de" ;
+false.
+
+?- mensajes_mas_parejos([rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol, gato], "casa miento").
+false.
+
+?- mensajes_mas_parejos([rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol, gato], "casa de flor").
+true ;
+false.
