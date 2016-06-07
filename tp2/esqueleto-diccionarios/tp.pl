@@ -122,18 +122,18 @@ mensajes_mas_parejos(S, L) :-
 	not((ponerEspacios(S, S2), descifrar(S2, _), palabras(S2, P2), largos(P2, N2), desvest(N2, D2), D2 < D)).
 
 
-%largos(+L, -N)
+%largos(+L, ?N)
 largos([],[]).
 largos([L|LS], [N|NS]) :- length(L, N), largos(LS, NS).
 
-%desvest(+L, -D)
+%desvest(+L, ?D)
 %Instancia en D el desvest^2 de la lista de numeros L
 desvest(L, D) :- promedio(L, P), length(L, N), desvestaux(L, P, N, D2), D is D2 / N.
 
-%desvestaux(+L, +P, +N, -D)
+%desvestaux(+L, +P, +N, ?D)
 desvestaux([], _, _, 0).
 desvestaux([L|LS], P, N, Res) :-
 	desvestaux(LS, P, N, Rec), Res is (L - P)*(L - P) + Rec.
 
-%promedio(+L, -N)
+%promedio(+L, ?N)
 promedio(L, N) :- sum_list(L, N2), length(L, N3), N is N2 / N3.
