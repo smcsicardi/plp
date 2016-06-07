@@ -33,7 +33,7 @@ ej(5, [hola, colo, como, andas, todo, bien, espacio, como, sol, luna, como, espa
 ej(6, [t, r, a, d, i, c, i, o, n, a, l, xm, e, n, t, e]).
 
 % Ejercico 1
-% diccionario_lista(?L) si se ingresa un atomo chequea si esta en el diccionario o no
+% diccionario_lista(?L) si se ingresa un atomo chequea si esta en el diccionario o no. Es ?L ya que "string_codes(?X, ?L)" permite que L este o no instanciado si X lo esta, lo cual se cumple ya que se instancia en "diccionario(X)".
 diccionario_lista(L):- diccionario(X), string_codes(X, L).
 
 % Ejercico 2
@@ -47,7 +47,8 @@ juntar_con([X],_,X).
 juntar_con([X,Y|XS],A,R):- append(X,[A|S],R), juntar_con([Y|XS],A,S).
 
 % Ejercico 3
-% palabras(?S, ?P) palabras es reversible pero alguna de las dos entradas debe estar instanciada
+% palabras(?S, ?P) palabras es reversible pero alguna de las dos entradas debe estar instanciada, esto se debe a lo dicho en "juntar_con(?X, ?A, ?R)" como A ya fue instanciado, solo falta que alguna de las otras dos se instancie lo que deja al restante con la posibilidad de instanciarse o no. member deja ?P, por lo que no afecta lo dicho anteriormente.
+
 palabras(S, P) :- juntar_con(P,espacio,S), not((member(L, P), member(espacio,L))).
 
 % Ejercico 4
@@ -83,13 +84,14 @@ pcvauxlet([P|PS], D, [V|VS], D3) :-
 buscar(P, D, V, D2) :- (asignar_var(P, D, D2)), member((P, V), D2).
 
 % Ejercico 6
-% quitar(?A,+LS,?RES) LS puede tener elementos no instanciados, funciona de manera sintactica
+% quitar(?A,+LS,?RES) LS puede tener elementos no instanciados, funciona de manera sintactica. Es ?A por trabajar de manera sintactica, por lo que no importa si A se encuentra instanciada o no. Es ?RES ya que no hay predicados que pidan instanciacion o no. Es +LS para su correcto funcionamiento pedido.
 quitar(_,[],[]).
 quitar(A,[H|T],L):-A==H, quitar(A,T,L).
 quitar(A,[H|T],[H|L]):-A\==H,quitar(A,T,L).
 
 % Ejercico 7
-% cant_distintos(+L, ?S).
+% cant_distintos(+L, ?S). Es +L ya que este argumento se utiliza en "quitar(X,XS,R)" en donde se pide que este instanciada. Es ?S ya que S solo aparece en "S is S2+1" en donde el is permite que la S este o no instanciada.
+
 cant_distintos([],0).
 cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
 
@@ -98,13 +100,15 @@ cant_distintos([X|XS],S) :- quitar(X,XS,R), cant_distintos(R,S2), S is S2+1.
 enlista([]).
 enlista([X|XS]) :- diccionario_lista(X), enlista(XS).
 
-% descifrar(+S,?M).
+% descifrar(+S,?M). Es +S ya que en "palabras(?S,?P)" alguna de los dos argumentos debe estar instanciado, como P no lo esta, S debe estarlo. Es ?M ya que "string_codes(?M,?N)" requiere que alguna de las dos este intanciada, lo cual N lo cumple, por lo tanto M puede o no estar instanciada.
+
 descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V), juntar_con(V,32,COMPARAR), cant_distintos(COMPARAR,C1), enlista(V), juntar_con(V,32,N), cant_distintos(N,C2), C1==C2, string_codes(M,N).
 
 % Ejercico 9
-% descifrar_sin_espacios(+S,?M)
+% descifrar_sin_espacios(+S,?M). Es +S ya que si no es instanciada, el predicado "ponerEspacios(S,S2)" no logra terminar. Es ?M ya que descifrar permite dicha instanciación.
 descifrar_sin_espacios(S,M):- ponerEspacios(S,S2), descifrar(S2,M).
 
+% ponerEspacios(?X,?Y)
 ponerEspacios([],[]).
 ponerEspacios([X],[X]).
 ponerEspacios([X,Y|XS],[X,espacio,Y|L]):- ponerEspacios([Y|XS], [Y|L]).
