@@ -33,6 +33,7 @@ ej(5, [hola, colo, como, andas, todo, bien, espacio, como, sol, luna, como, espa
 ej(6, [t, r, a, d, i, c, i, o, n, a, l, xm, e, n, t, e]).
 
 % Ejercico 1
+% diccionario_lista(?L) si se ingresa un atomo chequea si esta en el diccionario o no
 diccionario_lista(L):- diccionario(X), string_codes(X, L).
 
 % Ejercico 2
@@ -46,9 +47,13 @@ juntar_con([X],_,X).
 juntar_con([X,Y|XS],A,R):- append(X,[A|S],R), juntar_con([Y|XS],A,S).
 
 % Ejercico 3
+% palabras(?S, ?P) palabras es reversible pero alguna de las dos entradas debe estar instanciada
 palabras(S, P) :- juntar_con(P,espacio,S), not((member(L, P), member(espacio,L))).
 
 % Ejercico 4
+% asignar_var(?A,?LS,-RES) en caso de que ninguna de las dos primeras este instanciada
+% devolvera dos resultados LS vacio y A con una variable fresca, o LS una variable 
+% fresca y se le agrega A
 % El predicado funciona aunque no se sepa que es la variable V asignada ya que prolog
 % infiere un elemento en esa posicion cuando realiza el arbol de inferencia, para
 % que luego pasen una de las dos cosas siguientes, o se unifique con un valor,
@@ -78,6 +83,7 @@ pcvauxlet([P|PS], D, [V|VS], D3) :-
 buscar(P, D, V, D2) :- (asignar_var(P, D, D2)), member((P, V), D2).
 
 % Ejercico 6
+% quitar(?A,+LS,?RES) LS puede tener elementos no instanciados, funciona de manera sintactica
 quitar(_,[],[]).
 quitar(A,[H|T],L):-A==H, quitar(A,T,L).
 quitar(A,[H|T],[H|L]):-A\==H,quitar(A,T,L).
@@ -96,7 +102,7 @@ enlista([X|XS]) :- diccionario_lista(X), enlista(XS).
 descifrar(S,M) :- palabras(S,P), palabras_con_variables(P,V), juntar_con(V,32,COMPARAR), cant_distintos(COMPARAR,C1), enlista(V), juntar_con(V,32,N), cant_distintos(N,C2), C1==C2, string_codes(M,N).
 
 % Ejercico 9
-
+% descifrar_sin_espacios(+S,?M)
 descifrar_sin_espacios(S,M):- ponerEspacios(S,S2), descifrar(S2,M).
 
 ponerEspacios([],[]).
