@@ -5,6 +5,11 @@ L = [108, 97] ;
 L = [99, 97, 115, 97] ;
 L = [99, 111, 115, 97].
 
+?- cargar('dicc0.txt'), diccionario_lista([101,108]).
+true ;
+false.
+
+
 Ej 2:
 ?- juntar_con([[x],[x,y],[z]],a, R).
 R = [x, a, x, y, a, z] ;
@@ -40,10 +45,23 @@ S = [rombo, cuadrado, perro, cuadrado, espacio, sol, luna, triangulo, estrella|.
 P = [[rombo, cuadrado, perro, cuadrado], [sol, luna, triangulo, estrella, arbol, gato], [pirulo, triangulo], [lagarto, iguana, gato, spi]] ;
 false.
 
+?- palabras(S, [[rombo, cuadrado], [perro, cuadrado, sol, cuadrado]]).
+S = [rombo, cuadrado, espacio, perro, cuadrado, sol, cuadrado] ;
+false.
+
 Ej 4:
 ?- asignar_var(rombo, [], M).
 M = [ (rombo, _G1748)] ;
 false.
+
+?- asignar_var(rombo, X, M).
+X = [],
+M = [ (rombo, _G20)] ;
+X = M, M = [ (rombo, _G20)|_G17] ;
+false.
+
+?- asignar_var(X, [], M).
+M = [ (X, _G20)].
 
 ?- asignar_var(cuadrado, [(rombo, _G4012)], M).
 M = [ (rombo, _G4012), (cuadrado, _G1778)] ;
@@ -77,6 +95,10 @@ false.
 L = [B, z] ;
 false.
 
+?- quitar(A,[A,B,A,z], [B,z]).
+true ;
+false.
+
 Ej 7:
 ?- cant_distintos([x, Q, a, T, HOLA, T, o, p, a, Q, o, HOLA],S).
 S = 7 ;
@@ -85,10 +107,17 @@ false.
 ?- cant_distintos([x, Q, a, T, X, q, A, t],S).
 S = 8.
 
+?- cant_distintos([x, Q, a, T, X, q, A, t],8).
+true.
+
 Ej 8:
 ?- cargar('dicc0.txt'), ej(2,S), descifrar(S,M).
 S = [rombo, cuadrado, espacio, perro, triangulo, sol, cuadrado],
 M = "la cosa" ;
+false.
+
+?- cargar('dicc0.txt'), descifrar([rombo, cuadrado, espacio, perro, triangulo, sol, cuadrado] ,"la cosa").
+true ;
 false.
 
 ?- cargar('dicc1.txt'), ej(4,S), descifrar(S,M).
@@ -109,6 +138,14 @@ S = [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol|...
 M = "casa flor de" ;
 S = [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol|...],
 M = "casa miento" ;
+false.
+
+?- cargar('dicc0.txt'), descifrar_sin_espacios([rombo, cuadrado, perro, triangulo, sol, cuadrado] , M).
+M = "la cosa" ;
+false.
+
+?- cargar('dicc0.txt'), descifrar_sin_espacios([rombo, cuadrado, perro, triangulo, sol, cuadrado] ,"la cosa").
+true ;
 false.
 
 Ej 10:
