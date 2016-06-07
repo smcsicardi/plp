@@ -1,3 +1,10 @@
+Ej 1:
+?- cargar("dicc0.txt"), diccionario_lista(L).
+L = [101, 108] ;
+L = [108, 97] ;
+L = [99, 97, 115, 97] ;
+L = [99, 111, 115, 97].
+
 Ej 2:
 ?- juntar_con([[x],[x,y],[z]],a, R).
 R = [x, a, x, y, a, z] ;
@@ -22,6 +29,30 @@ false.
 true ;
 false.
 
+Ej 3:
+?- ej(1, S), palabras(S, P).
+S = [rombo, cuadrado, espacio, perro, cuadrado, sol, cuadrado],
+P = [[rombo, cuadrado], [perro, cuadrado, sol, cuadrado]] ;
+false.
+
+?- ej(4, S), palabras(S, P).
+S = [rombo, cuadrado, perro, cuadrado, espacio, sol, luna, triangulo, estrella|...],
+P = [[rombo, cuadrado, perro, cuadrado], [sol, luna, triangulo, estrella, arbol, gato], [pirulo, triangulo], [lagarto, iguana, gato, spi]] ;
+false.
+
+Ej 4:
+?- asignar_var(rombo, [], M).
+M = [ (rombo, _G1748)] ;
+false.
+
+?- asignar_var(cuadrado, [(rombo, _G4012)], M).
+M = [ (rombo, _G4012), (cuadrado, _G1778)] ;
+false.
+
+?- asignar_var(rombo, [(cuadrado, _G4013),(rombo, _G4012)], M).
+M = [ (cuadrado, _G4013), (rombo, _G4012)] ;
+false.
+
 Ej 5:
 ?- ej(1, S), palabras(S, P), palabras_con_variables(P, V).
 S = [rombo, cuadrado, espacio, perro, cuadrado, sol, cuadrado],
@@ -35,6 +66,15 @@ false.
 
 ?- palabras_con_variables([[1],[2,1]], [[0],[0,0]]).
 true ;
+false.
+
+Ej 6:
+?- quitar(z,[A,B,A,z],L).
+L = [A, B, A] ;
+false.
+
+?- quitar(A,[A,B,A,z],L).
+L = [B, z] ;
 false.
 
 Ej 7:
@@ -59,6 +99,16 @@ false.
 ?- cargar('10000_formas.txt'), ej(6,S), descifrar(S,M).
 S = [t, r, a, d, i, c, i, o, n|...],
 M = "tradicionalmente" ;
+false.
+
+Ej 9:
+?- ej(3, S), descifrar_sin_espacios(S, M).
+S = [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol|...],
+M = "casa de flor" ;
+S = [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol|...],
+M = "casa flor de" ;
+S = [rombo, cuadrado, perro, cuadrado, sol, luna, triangulo, estrella, arbol|...],
+M = "casa miento" ;
 false.
 
 Ej 10:
